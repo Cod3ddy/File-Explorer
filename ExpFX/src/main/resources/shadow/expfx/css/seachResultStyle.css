@@ -1,0 +1,7 @@
+.list-view{
+    -fx-background-radius: 10;
+}
+
+.list-cell, .list-cell::focused{
+    -fx-border-radius: 10;
+}

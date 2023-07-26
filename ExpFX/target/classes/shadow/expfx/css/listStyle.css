@@ -1,0 +1,24 @@
+.list-view{
+    -fx-border-color: transparent;
+    -fx-background-color: transparent;
+    -fx-background-radius: 10;
+}
+
+.list-cell{
+    -fx-background-color: transparent;
+}
+
+.list-cell:selected{
+    -fx-background-color: rgba(0,150,255, 0.7);
+    -fx-border-radius: 20;
+}
+
+
+.list-cell.empty-row:hover{
+    -fx-background-color: transparent;
+    -fx-cursor: default;
+    -fx-pointer-events: none;
+}
+.list-cell.non-empty-row:hover{
+    -fx-background-color: lightblue;
+}

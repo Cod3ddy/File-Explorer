@@ -22,6 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Stack;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -57,9 +60,11 @@ public class MainController implements Initializable {
     private TextField searchField;
     @FXML
     private Button backBtn;
-
     @FXML
     private  Button fwdBtn;
+
+    @FXML
+    private Button searchBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -144,11 +149,18 @@ public class MainController implements Initializable {
     }
     @FXML
     private void searchDirectory(){
-        searchListView.refresh();
-        System.out.println("Thread starting");
-        Search search = new Search(dirField.getText(), searchField.getText(), searchListView);
-        Thread searchThread= new Thread(search);
-        searchThread.start();
+        Search searchTask = new Search(dirField.getText(), searchField.getText(), searchListView);
+        searchTask.setOnRunning((taskRunning) -> {
+            searchBtn.setDisable(true);
+        });
+        searchTask.setOnSucceeded((taskFinished) -> {
+            searchTask.getSearchList().setItems(searchTask.searchResult());
+            searchTask.getSearchList().setVisible(true);
+            searchBtn.setDisable(false);
+        });
+        ExecutorService executeService = Executors.newFixedThreadPool(1);
+        executeService.execute(searchTask);
+        executeService.shutdown();
     }
 
     @FXML
